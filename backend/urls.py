@@ -1,12 +1,14 @@
 from django.contrib import admin
-from django.urls import path, include                 # add this
-from rest_framework import routers                    # add this
-from dashboard import views                            # add this
+from django.urls import path, include  
+from dashboard.views import Tab1MapView, DashboardView, AreaView          
+from rest_framework import routers                                    
 
-router = routers.DefaultRouter()                      # add this
-router.register(r'utdata', views.DashboardView, 'dashboard')     # add this
+router = routers.SimpleRouter()                     
+router.register(r'tabs', DashboardView, basename='drop') 
+router.register(r'tab1', Tab1MapView, basename='maps')    
+router.register(r'areaList', AreaView, 'area')     # add this
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls))                # add this
+    path('api/', include(router.urls))               
 ]
