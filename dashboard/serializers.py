@@ -8,20 +8,16 @@ class AreaEnSerializer(serializers.ModelSerializer):
 
 class AreaEnDropSerializer(serializers.ModelSerializer):
    # area_parent_id= serializers.DecimalField(max_digits=255, decimal_places=3)	
-    # area_level= serializers.DecimalField(max_digits=255, decimal_places=3)	
-    value = serializers.SerializerMethodField('get_area_id')	# renaming the field from area_id to value
-    label = serializers.SerializerMethodField('get_area_name')	#renaming
+    # area_level= serializers.DecimalField(max_digits=255, decimal_places=3)
+    value =  serializers.CharField(source='area_id')	#renaming and changing int to charfield
+    label = serializers.CharField(source='area_name')	#renaming
 
 
     class Meta:	
         model = AreaEn	
         fields = ('value','label')	
 
-    def get_area_id(self, obj):	
-        return obj.area_id	
-
-    def get_area_name(self, obj):	
-        return obj.area_name 
+    
 
 class IndicatorSerializer(serializers.ModelSerializer):
     class Meta:
