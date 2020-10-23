@@ -19,18 +19,19 @@ class IndicatorListView(generics.ListAPIView):
 
 class SubgroupListView(generics.ListAPIView): 
         serializer_class = IndicatorUnitSubgroupSerializer
-        def get_queryset(self):
-                indicatorSelect = self.request.query_params.get('indicator', None)
-                queryset = IndicatorUnitSubgroup.objects.filter(Q(indicator_id=12)).select_related('subgroup').order_by('subgroup__subgroup_order')
+        def get_queryset(self,*args, **kwargs):
+                indicatorSelect = self.kwargs.get('indicator') #12
+                print(indicatorSelect)
+                queryset = IndicatorUnitSubgroup.objects.filter(Q(indicator_id=indicatorSelect)).select_related('subgroup').order_by('subgroup__subgroup_order')
                 return queryset
 
 class TimeperiodListView(generics.ListAPIView): 
         serializer_class = UtDatatimeSerializer
-        def get_queryset(self):
-                indicatorSelect = self.request.query_params.get('indicator', None)
-                subgroupSelect = self.request.query_params.get('subgroup', None)
-                areaSelect = self.request.query_params.get('area', None)
-                queryset = UtData.objects.filter(Q(indicator=12) & Q(subgroup=6) & Q(area=1)).select_related('timeperiod').distinct().order_by('-timeperiod')
+        def get_queryset(self,*args,**kwargs):
+                indicatorSelect = self.kwargs.get('indicator') #12
+                subgroupSelect = self.kwargs.get('subgroup') #6
+                areaSelect = self.kwargs.get('area') #1
+                queryset = UtData.objects.filter(Q(indicator=indicatorSelect) & Q(subgroup=subgroupSelect) & Q(area=areaSelect)).select_related('timeperiod').distinct().order_by('-timeperiod')
                 return queryset
 
 class AreaListView(generics.ListAPIView): 
@@ -41,12 +42,12 @@ class AreaListView(generics.ListAPIView):
 
 class IndiaMapView(generics.ListAPIView): 
         serializer_class = UtDataSerializer
-        def get_queryset(self):
-                indicatorSelect = self.request.query_params.get('indicator', None)
-                subgroupSelect = self.request.query_params.get('subgroup', None)
-                timeperiodSelect = self.request.query_params.get('timeperiod', None)
-                areaLevel = self.request.query_params.get('area_level', None)
-                queryset = UtData.objects.filter(Q(indicator=12) & Q(subgroup=6) & Q(timeperiod=21) & Q(area__area_level=2)).select_related('area')		
+        def get_queryset(self,*args,**kwargs):
+                indicatorSelect = self.kwargs.get('indicator', None) #12
+                subgroupSelect = self.kwargs.get('subgroup', None) #6
+                timeperiodSelect = self.kwargs.get('timeperiod', None) #21
+                areaLevel = self.kwargs.get('area_level', None) #2
+                queryset = UtData.objects.filter(Q(indicator=indicatorSelect) & Q(subgroup=subgroupSelect) & Q(timeperiod=timeperiodSelect) & Q(area__area_level=areaLevel)).select_related('area')		
                 return queryset
 
 class AreaDataView(generics.ListAPIView): 
@@ -57,7 +58,7 @@ class AreaDataView(generics.ListAPIView):
                 timeperiodSelect = self.request.query_params.get('timeperiod', None)
                 areaSelect = self.request.query_params.get('area', None)
                 areaDetails=AreaEn.objects.filter(area_id=6).values('area_level','area_name')
-                print(areaDetails)
+                print(indicatorSelect,subgroupSelect)
                 select_area_level = areaDetails[0].get('area_level')
                 select_area_name = areaDetails[0].get('area_name')
                 if select_area_level == 2:

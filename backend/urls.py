@@ -5,11 +5,10 @@ from dashboard.views import IndicatorListView, SubgroupListView, TimeperiodListV
 
 urlpatterns = [
     path('api/indicator', IndicatorListView.as_view(), name='indicator'),
-    path('api/subgroup',  SubgroupListView.as_view(), name='subgroup'),
-    path('api/timeperiod', TimeperiodListView.as_view(), name='timeperiod'),
+    path('api/subgroup/<int:indicator>',  SubgroupListView.as_view(), name='subgroup'),
+    path('api/timeperiod/<int:indicator>/<int:subgroup>/<int:area>', TimeperiodListView.as_view(), name='timeperiod'),
     path('api/area', AreaListView.as_view(), name='area'),
-    path('api/indiaMap', IndiaMapView.as_view(), name='indiaMap'),
+    path('api/indiaMap/<int:indicator>/<int:subgroup>/<int:timeperiod>/<int:area_level>', IndiaMapView.as_view(), name='indiaMap'),
     path('api/areaData', AreaDataView.as_view(), name='areaData'),
     path('api/areaMap', AreaMapView.as_view(), name='areaMap'),
-    
 ]
