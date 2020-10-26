@@ -23,7 +23,10 @@ class SubgroupListView(generics.ListAPIView):
                 indicatorSelect = self.kwargs.get('indicator') #12
                 print(indicatorSelect)
                 queryset = IndicatorUnitSubgroup.objects.filter(Q(indicator_id=indicatorSelect)).select_related('subgroup').order_by('subgroup__subgroup_order')
+                print(queryset.values())
                 return queryset
+
+                # subgroup_id,subgroup_name
 
 class TimeperiodListView(generics.ListAPIView): 
         serializer_class = UtDatatimeSerializer
@@ -52,13 +55,12 @@ class IndiaMapView(generics.ListAPIView):
 
 class AreaDataView(generics.ListAPIView): 
         serializer_class = UtDataSerializer
-        def get_queryset(self):
-                indicatorSelect = self.request.query_params.get('indicator', None)
-                subgroupSelect = self.request.query_params.get('subgroup', None)
-                timeperiodSelect = self.request.query_params.get('timeperiod', None)
-                areaSelect = self.request.query_params.get('area', None)
+        def get_queryset(self,*args,**kwargs):
+                indicatorSelect = self.kwargs.get('indicator', None)
+                subgroupSelect = self.kwargs.get('subgroup', None)
+                timeperiodSelect = self.kwargs.get('timeperiod', None)
+                areaSelect =self.kwargs.get('area', None)
                 areaDetails=AreaEn.objects.filter(area_id=6).values('area_level','area_name')
-                print(indicatorSelect,subgroupSelect)
                 select_area_level = areaDetails[0].get('area_level')
                 select_area_name = areaDetails[0].get('area_name')
                 if select_area_level == 2:
@@ -70,8 +72,8 @@ class AreaDataView(generics.ListAPIView):
 
 class AreaMapView(generics.ListAPIView): 
         serializer_class = NiStDtbPolySerializer
-        def get_queryset(self):
-                areaSelect = self.request.query_params.get('area', None)
+        def get_queryset(self,*args,**kwargs):
+                areaSelect = self.kwargs.get('area', None)
                 areaDetails=AreaEn.objects.filter(area_id=6).values('area_level','area_name')
                 select_area_level = areaDetails[0].get('area_level')
                 select_area_name = areaDetails[0].get('area_name')
@@ -82,5 +84,3 @@ class AreaMapView(generics.ListAPIView):
                         area_parent_name= AreaEn.objects.filter(area_parent_id=area_parentid).value('area_name')
                         area_geodata = NiStDtbPoly.objects.all().filter(st_name=area_parent_name)	
                 return queryset
-
-

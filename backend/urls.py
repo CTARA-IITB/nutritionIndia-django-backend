@@ -9,6 +9,6 @@ urlpatterns = [
     path('api/timeperiod/<int:indicator>/<int:subgroup>/<int:area>', TimeperiodListView.as_view(), name='timeperiod'),
     path('api/area', AreaListView.as_view(), name='area'),
     path('api/indiaMap/<int:indicator>/<int:subgroup>/<int:timeperiod>/<int:area_level>', IndiaMapView.as_view(), name='indiaMap'),
-    path('api/areaData', AreaDataView.as_view(), name='areaData'),
-    path('api/areaMap', AreaMapView.as_view(), name='areaMap'),
+    path('api/areaData/<int:indicator>/<int:subgroup>/<int:timeperiod>/<int:area>', AreaDataView.as_view(), name='areaData'),
+    path('api/areaMap/<int:area>', AreaMapView.as_view(), name='areaMap'),
 ]
