@@ -7,15 +7,12 @@ class AreaEnSerializer(serializers.ModelSerializer):
         fields = ('area_id', 'area_code', 'area_name')
 
 class AreaEnDropSerializer(serializers.ModelSerializer):
-   # area_parent_id= serializers.DecimalField(max_digits=255, decimal_places=3)	
-    # area_level= serializers.DecimalField(max_digits=255, decimal_places=3)
-    value =  serializers.CharField(source='area_id')	#renaming and changing int to charfield
-    label = serializers.CharField(source='area_name')	#renaming
-
+    area_parent_id= serializers.IntegerField()	
+    area_level= serializers.IntegerField()
 
     class Meta:	
         model = AreaEn	
-        fields = ('value','label')	
+        fields = ('area_id','area_name','area_parent_id','area_level')	
 
     
 
