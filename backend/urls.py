@@ -4,7 +4,7 @@ from dashboard.views import IndicatorListView, SubgroupListView, TimeperiodListV
 
 
 urlpatterns = [
-    path('api/indicator', IndicatorListView.as_view(), name='indicator'),
+    path('api/indicator/<int:tab>', IndicatorListView.as_view(), name='indicator'),
     path('api/subgroup/<int:indicator>',  SubgroupListView.as_view(), name='subgroup'),
     path('api/timeperiod/<int:indicator>/<int:subgroup>/<int:area>', TimeperiodListView.as_view(), name='timeperiod'),
     path('api/area', AreaListView.as_view(), name='area'),

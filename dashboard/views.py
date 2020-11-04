@@ -12,9 +12,9 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 class IndicatorListView(generics.ListAPIView): 
         serializer_class = IndicatorSerializer
-        def get_queryset(self):
-                selectedTab = self.request.query_params.get('tab', None)
-                queryset = Indicator.objects.filter(Q(classification=8)).values('indicator_id', 'indicator_name').order_by('indicator_order')
+        def get_queryset(self,*args, **kwargs):
+                selectedTab = self.kwargs.get('tab', None)
+                queryset = Indicator.objects.filter(Q(classification=selectedTab)).values('indicator_id', 'indicator_name').order_by('indicator_order')
                 return queryset
 
 class SubgroupListView(generics.ListAPIView): 
@@ -60,21 +60,21 @@ class AreaDataView(generics.ListAPIView):
                 subgroupSelect = self.kwargs.get('subgroup', None)
                 timeperiodSelect = self.kwargs.get('timeperiod', None)
                 areaSelect =self.kwargs.get('area', None)
-                areaDetails=AreaEn.objects.filter(area_id=6).values('area_level','area_name')
+                areaDetails=AreaEn.objects.filter(area_id=areaSelect).values('area_level','area_name')
                 select_area_level = areaDetails[0].get('area_level')
                 select_area_name = areaDetails[0].get('area_name')
                 if select_area_level == 2:
-                    queryset = UtData.objects.filter(Q(indicator=12) & Q(subgroup=6) & Q(timeperiod=19) & Q(area__area_parent_id=6)).select_related('area')
+                    queryset = UtData.objects.filter(Q(indicator=indicatorSelect) & Q(subgroup=subgroupSelect) & Q(timeperiod=timeperiodSelect) & Q(area__area_parent_id=areaSelect)).select_related('area')
                 elif select_area_level == 3:
                     area_parentid =AreaEn.objects.filter(area_id=areaSelect).value('area_parent_id')
-                    queryset = UtData.objects.filter(Q(indicator=12) & Q(subgroup=6) & Q(timeperiod=19) & Q(area__area_parent_id=area_parentid)).select_related('area')
+                    queryset = UtData.objects.filter(Q(indicator=indicatorSelect) & Q(subgroup=subgroupSelect) & Q(timeperiod=timeperiodSelect) & Q(area__area_parent_id=area_parentid)).select_related('area')
                 return queryset
 
 class AreaMapView(generics.ListAPIView): 
         serializer_class = NiStDtbPolySerializer
         def get_queryset(self,*args,**kwargs):
                 areaSelect = self.kwargs.get('area', None)
-                areaDetails=AreaEn.objects.filter(area_id=6).values('area_level','area_name')
+                areaDetails=AreaEn.objects.filter(area_id=areaSelect).values('area_level','area_name')
                 select_area_level = areaDetails[0].get('area_level')
                 select_area_name = areaDetails[0].get('area_name')
                 if select_area_level == 2:
