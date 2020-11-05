@@ -18,11 +18,11 @@ class AreaEnDropSerializer(serializers.ModelSerializer):
 
 class IndicatorSerializer(serializers.ModelSerializer):
     value =  serializers.CharField(source='indicator_id')	#renaming and changing int to charfield
-    label = serializers.CharField(source='indicator_name')	#renaming
+    title = serializers.CharField(source='indicator_name')	#renaming
 
     class Meta:
         model = Indicator
-        fields = ('value','label')	
+        fields = ('value','title')	
 
 class SubgroupSerializer(serializers.ModelSerializer):
     class Meta:
@@ -36,18 +36,18 @@ class TimeperiodSerializer(serializers.ModelSerializer):
 
 class IndicatorUnitSubgroupSerializer(serializers.ModelSerializer):
     value = serializers.CharField(source='subgroup.subgroup_id')
-    label = serializers.CharField(source='subgroup.subgroup_name')
+    title = serializers.CharField(source='subgroup.subgroup_name')
 
     class Meta:
         model = IndicatorUnitSubgroup
-        fields = ('value','label')	
+        fields = ('value','title')	
 
 class UtDatatimeSerializer(serializers.ModelSerializer):
     value = serializers.CharField(source='timeperiod.timeperiod_id')
-    label = serializers.CharField(source='timeperiod.timeperiod')
+    title = serializers.CharField(source='timeperiod.timeperiod')
     class Meta:
         model = UtData
-        fields = ('value','label')	
+        fields = ('value','title')	
 
 class UtDataSerializer(serializers.ModelSerializer):
     area = AreaEnSerializer()
